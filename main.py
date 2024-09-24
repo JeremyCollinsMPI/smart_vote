@@ -6,4 +6,8 @@ for scenario in scenarios:
     voting.run()
     print(scenario['name'])
     print(voting.winner)
+    if voting.condorcet_winner:
+        print('Condorcet winner: ' + voting.condorcet_winner)
+    else:
+        print('No Condorcet winner')
     print('Condorcet winner based on real preferences ', scenario['condorcet_winner'])

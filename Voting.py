@@ -29,7 +29,7 @@ class Voting:
         if self.condorcet_winner:
             self.winner = self.condorcet_winner
         else:
-            candidates = self.find_candidates_preferred_to_first_past_the_post_candidate(votes)
+            candidates = self.find_candidates_preferred_to_first_past_the_post_candidate(self.votes)
             if len(candidates) == 1:
                 self.winner = candidates[0]
             else:
@@ -66,9 +66,10 @@ class Voting:
     def find_condorcet_winner(self, votes):
         # Step 1: Get the list of candidates
         candidates = set()
-        for vote in self.votes:
+        for vote in votes:
             candidates.update(vote.keys())
         candidates = list(candidates)
+        candidates = sorted(candidates)
         
         # Step 2: Create a matrix to store pairwise comparisons
         # wins_matrix[i][j] will count how many voters prefer candidate[i] over candidate[j]
@@ -76,7 +77,7 @@ class Voting:
         wins_matrix = [[0] * n for _ in range(n)]
         
         # Step 3: Populate the pairwise victories matrix
-        for vote in votes:
+        for x, vote in enumerate(votes):
             for i in range(n):
                 for j in range(n):
                     if i != j:
@@ -125,34 +126,3 @@ class Voting:
         return candidates_preferred_over_fptp
 
 
-
-
-
-# votes = [
-#     {"Alice": 1, "Bob": 2, "Charlie": 3},
-#     {"Bob": 1, "Charlie": 2, "Alice": 3},
-#     {"Charlie": 1, "Alice": 2, "Bob": 3},
-#     {"Alice": 1, "Charlie": 2, "Bob": 3}
-# ]
-
-# voting = Voting(votes)
-# voting.run()
-# print(voting.condorcet_winner)
-
-votes = [
-    {"Alice": 1, "Bob": 2, "Charlie": 3},
-    {"Bob": 1, "Charlie": 2, "Alice": 3},
-    {"Charlie": 1, "Alice": 2, "Bob": 3},
-    {"Alice": 1, "Charlie": 2, "Bob": 3}
-]
-
-votes = []
-for i in range(46):
-    votes.append({"Alice": 1, 'Bob': 2, 'Charlie': 3})
-for i in range(44):
-    votes.append({'Bob': 1, "Alice": 2, 'Charlie': 3})
-for i in range(10):
-    votes.append({'Charlie': 1, "Bob": 2, 'Alice': 3})
-
-voting = Voting(votes)
-voting.run()
