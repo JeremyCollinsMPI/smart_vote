@@ -22,11 +22,11 @@ Scenario 1.2: B is Condorcet winner
 
 votes = []
 for i in range(46):
-    votes.append({"Alice": 1, 'Bob': 2, 'Charlie': 3})
+    votes.append({"Alice": 100, 'Bob': 50, 'Charlie': 0})
 for i in range(44):
-    votes.append({'Bob': 1, "Alice": 2, 'Charlie': 3})
+    votes.append({'Bob': 100, "Alice": 50, 'Charlie': 0})
 for i in range(10):
-    votes.append({'Charlie': 1, "Bob": 2, 'Alice': 3})
+    votes.append({'Charlie': 100, "Bob": 50, 'Alice': 0})
 
 scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Bob", "name": "1.2.1"})
 
@@ -34,15 +34,37 @@ scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Bob", "name": "
 1.2.2 A voters bury B vote
 '''
 
+'''
+1.2.2.1 A voters have a higher score for C than the other candidates have
+'''
+
 votes = []
 for i in range(46):
-    votes.append({"Alice": 1, 'Bob': 3, 'Charlie': 2})
+    votes.append({"Alice": 100, 'Bob': 0, 'Charlie': 55})
 for i in range(44):
-    votes.append({'Bob': 1, "Alice": 2, 'Charlie': 3})
+    votes.append({'Bob': 100, "Alice": 50, 'Charlie': 0})
 for i in range(10):
-    votes.append({'Charlie': 1, "Bob": 2, 'Alice': 3})
+    votes.append({'Charlie': 100, "Bob": 50, 'Alice': 0})
 
-scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Bob", "name": "1.2.2"})
+scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Bob", "name": "1.2.2.1"})
+
+
+'''
+1.2.2.2 A voters have a lower score for C than the other candidates have
+'''
+
+votes = []
+for i in range(46):
+    votes.append({"Alice": 100, 'Bob': 0, 'Charlie': 50})
+for i in range(44):
+    votes.append({'Bob': 100, "Alice": 50, 'Charlie': 0})
+for i in range(10):
+    votes.append({'Charlie': 100, "Bob": 55, 'Alice': 0})
+
+scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Bob", "name": "1.2.2.2"})
+
+
+
 
 
 '''
@@ -59,11 +81,11 @@ Scenario 1.3: C is Condorcet winner
 
 votes = []
 for i in range(46):
-    votes.append({"Alice": 1, 'Bob': 3, 'Charlie': 2})
+    votes.append({"Alice": 100, 'Bob': 0, 'Charlie': 50})
 for i in range(44):
-    votes.append({'Bob': 1, "Alice": 3, 'Charlie': 2})
+    votes.append({'Bob': 100, "Alice": 0, 'Charlie': 50})
 for i in range(10):
-    votes.append({'Charlie': 1, "Bob": 3, 'Alice': 2})
+    votes.append({'Charlie': 100, "Bob": 0, 'Alice': 50})
 
 scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Charlie", "name": "1.3.1.1"})
 
@@ -73,11 +95,11 @@ scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Charlie", "name
 
 votes = []
 for i in range(46):
-    votes.append({"Alice": 1, 'Bob': 2, 'Charlie': 3})
+    votes.append({"Alice": 100, 'Bob': 50, 'Charlie': 0})
 for i in range(44):
-    votes.append({'Bob': 1, "Alice": 3, 'Charlie': 2})
+    votes.append({'Bob': 100, "Alice": 0, 'Charlie': 50})
 for i in range(10):
-    votes.append({'Charlie': 1,  'Alice': 2, "Bob": 3})
+    votes.append({'Charlie': 100,  'Alice': 50, "Bob": 0})
 
 scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Charlie", "name": "1.3.1.2"})
 
@@ -97,13 +119,13 @@ sincere preferences
 
 votes = []
 for i in range(25):
-    votes.append({"Top": 1, 'Centre': 2, 'Bottom': 3})
+    votes.append({"Top": 100, 'Centre': 50, 'Bottom': 0})
 for i in range(15):
-    votes.append({"Top": 2, 'Centre': 1, 'Bottom': 3})
+    votes.append({"Top": 50, 'Centre': 100, 'Bottom': 0})
 for i in range(15):
-    votes.append({"Top": 3, 'Centre': 1, 'Bottom': 2})
+    votes.append({"Top": 0, 'Centre': 100, 'Bottom': 50})
 for i in range(39):
-    votes.append({"Top": 3, 'Centre': 2, 'Bottom': 1})
+    votes.append({"Top": 0, 'Centre': 50, 'Bottom': 100})
 
 scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Centre", "name": "vote splitting"})
 
@@ -122,12 +144,46 @@ add some more top votes
 
 votes = []
 for i in range(31):
-    votes.append({"Top": 1, 'Centre': 2, 'Bottom': 3})
+    votes.append({"Top": 100, 'Centre': 50, 'Bottom': 0})
 for i in range(15):
-    votes.append({"Top": 2, 'Centre': 1, 'Bottom': 3})
+    votes.append({"Top": 50, 'Centre': 100, 'Bottom': 0})
 for i in range(15):
-    votes.append({"Top": 3, 'Centre': 1, 'Bottom': 2})
+    votes.append({"Top": 0, 'Centre': 100, 'Bottom': 50})
 for i in range(39):
-    votes.append({"Top": 3, 'Centre': 2, 'Bottom': 1})
+    votes.append({"Top": 0, 'Centre': 50, 'Bottom': 100})
 
 scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Centre", "name": "vote splitting with more top voters"})
+
+'''
+four candidate condorcet cycle
+
+40 voters prefer the order: A > B > C > D
+35 voters prefer: B > C > D > A
+25 voters prefer: C > D > A > B
+10 voters prefer: D > A > B > C
+
+first past the post winner is A
+
+the challengers would be ones preferred to A;
+which in this case are D and C.
+my recursive method;
+fptp winner of B, C, D is B.
+who is preferred to B.
+
+maybe you just look at the challengers who are available, 
+and you find the condorcet winner among just those challengers
+in this case the challengers are D and C;
+
+'''
+
+votes = []
+for i in range(40):
+    votes.append({"A": 100, "B": 75, "C": 50, "D": 25})
+for i in range(35):
+    votes.append({"A": 25, "B": 100, "C": 75, "D": 50})
+for i in range(25):
+    votes.append({"A": 50, "B": 25, "C": 100, "D": 75})
+for i in range(10):
+    votes.append({"A": 75, "B": 50, "C": 25, "D": 100})
+
+scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "None", "name": "four way condorcet cycle"})
