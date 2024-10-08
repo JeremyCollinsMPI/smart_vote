@@ -28,14 +28,15 @@ for i in range(44):
 for i in range(10):
     votes.append({'Charlie': 100, "Bob": 50, 'Alice': 0})
 
-scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Bob", "name": "1.2.1"})
+scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Bob", "name": "1.2.1",
+    "alliances": [['Bob', 'Charlie']]})
 
 '''
 1.2.2 A voters bury B vote
 '''
 
 '''
-1.2.2.1 A voters have a higher score for C than the other candidates have
+1.2.2.1 Bob and Charlie form an alliance, showing that Charlie wins if A voters attempt to bury the B voters
 '''
 
 votes = []
@@ -46,22 +47,10 @@ for i in range(44):
 for i in range(10):
     votes.append({'Charlie': 100, "Bob": 50, 'Alice': 0})
 
-scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Bob", "name": "1.2.2.1"})
+scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Bob", "name": "1.2.2.1",
+    "alliances": [['Bob', 'Charlie']]})
 
 
-'''
-1.2.2.2 A voters have a lower score for C than the other candidates have
-'''
-
-votes = []
-for i in range(46):
-    votes.append({"Alice": 100, 'Bob': 0, 'Charlie': 50})
-for i in range(44):
-    votes.append({'Bob': 100, "Alice": 50, 'Charlie': 0})
-for i in range(10):
-    votes.append({'Charlie': 100, "Bob": 55, 'Alice': 0})
-
-scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Bob", "name": "1.2.2.2"})
 
 
 
@@ -91,6 +80,7 @@ scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Charlie", "name
 
 '''
 1.2.2 A voters bury C vote
+1.2.2.1 C forms an alliance with B
 '''
 
 votes = []
@@ -101,7 +91,24 @@ for i in range(44):
 for i in range(10):
     votes.append({'Charlie': 100,  'Alice': 50, "Bob": 0})
 
-scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Charlie", "name": "1.3.1.2"})
+scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Charlie", "name": "1.3.1.2",
+    "alliances": [['Bob', 'Charlie']]})
+
+
+'''
+1.2.2.2 A and B form an alliance
+'''
+
+votes = []
+for i in range(46):
+    votes.append({"Alice": 100, 'Bob': 50, 'Charlie': 0})
+for i in range(44):
+    votes.append({'Bob': 100, "Alice": 0, 'Charlie': 50})
+for i in range(10):
+    votes.append({'Charlie': 100,  'Alice': 50, "Bob": 0})
+
+scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Charlie", "name": "1.3.1.2",
+    "alliances": [['Bob', 'Alice']]})
 
 
 
@@ -127,7 +134,7 @@ for i in range(15):
 for i in range(39):
     votes.append({"Top": 0, 'Centre': 50, 'Bottom': 100})
 
-scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Centre", "name": "vote splitting"})
+# scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Centre", "name": "vote splitting"})
 
 
 '''
@@ -152,7 +159,7 @@ for i in range(15):
 for i in range(39):
     votes.append({"Top": 0, 'Centre': 50, 'Bottom': 100})
 
-scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Centre", "name": "vote splitting with more top voters"})
+# scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "Centre", "name": "vote splitting with more top voters"})
 
 '''
 four candidate condorcet cycle
@@ -186,4 +193,4 @@ for i in range(25):
 for i in range(10):
     votes.append({"A": 75, "B": 50, "C": 25, "D": 100})
 
-scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "None", "name": "four way condorcet cycle"})
+# scenarios.append({"votes": deepcopy(votes), "condorcet_winner": "None", "name": "four way condorcet cycle"})

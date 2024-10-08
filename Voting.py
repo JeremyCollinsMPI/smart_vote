@@ -3,18 +3,24 @@ import networkx as nx
 
 class Voting:
 
-    def __init__(self, votes=[]):
+    def __init__(self, votes=[], alliances=[]):
         self.votes = votes
         self.condorcet_winner = None
+        self.alliances = alliances
+        self.sort_alliances_in_reverse_order_by_length()
+
+    def sort_alliances_in_reverse_order_by_length(self):
+        self.alliances = sorted(self.alliances, key=lambda x:len(x), reverse=True)
 
     def run(self):
         self.candidates = self.find_all_candidates(self.votes)
-        self.condorcet_winner = self.find_condorcet_winner(self.votes)
+        self.condorcet_winner = self.find_condorcet_winner(self.votes, self.candidates)
         if self.condorcet_winner:
             self.winner = self.condorcet_winner
         else:
             smith_set_candidates = self.find_smith_set(self.votes)
-            self.winner = self.find_candidate_with_highest_mean_score_of_second_preferences(smith_set_candidates, self.votes)
+            for alliance in self.alliances:
+                self.alliance_candidates = self.find_alliance_candidates(smith_set_candidates, alliance)
 
     def find_all_candidates(self, votes):
         # Use a set to avoid duplicates
@@ -25,12 +31,8 @@ class Voting:
         # Convert set to list and store in self.candidates
         return list(candidates_set)
 
-    def find_condorcet_winner(self, votes):
+    def find_condorcet_winner(self, votes, candidates):
         # Step 1: Get the list of candidates
-        candidates = set()
-        for vote in votes:
-            candidates.update(vote.keys())
-        candidates = list(candidates)
         candidates = sorted(candidates)
         
         # Step 2: Create a matrix to store pairwise comparisons
@@ -103,34 +105,5 @@ class Voting:
         smith_scc = sccs[scc_order[0]]  # The first SCC in topological order is the Smith set
         return list(smith_scc)
     
-    def find_candidate_with_highest_mean_score_of_second_preferences(self, smith_set_candidates, votes):
-        # Step 1: Initialize dictionaries to track total second-preference score and count
-        second_preference_scores = {candidate: 0 for candidate in smith_set_candidates}
-        second_preference_counts = {candidate: 0 for candidate in smith_set_candidates}
-
-        # Step 2: Iterate over each vote to find second preferences
-        for vote in votes:
-            # Step 3: Find the candidate with the second-highest score (excluding the first preference)
-            sorted_candidates = sorted(vote.items(), key=lambda item: item[1], reverse=True)  # Sort by score, highest first
-            if len(sorted_candidates) > 1:
-                # Get the second-preference candidate
-                second_preference_candidate = sorted_candidates[1][0]
-                second_preference_score = sorted_candidates[1][1]
-
-                # If the second-preference candidate is in the Smith set, accumulate their score
-                if second_preference_candidate in smith_set_candidates:
-                    second_preference_scores[second_preference_candidate] += second_preference_score
-                    second_preference_counts[second_preference_candidate] += 1
-
-        # Step 4: Calculate mean scores for second preferences
-        mean_scores = {}
-        for candidate in smith_set_candidates:
-            if second_preference_counts[candidate] > 0:
-                mean_scores[candidate] = second_preference_scores[candidate] / second_preference_counts[candidate]
-            else:
-                mean_scores[candidate] = float('-inf')  # If no second preferences, set to negative infinity
-        print(mean_scores)
-        # Step 5: Find the candidate with the highest mean score for second preferences
-        highest_mean_candidate = max(mean_scores, key=mean_scores.get)
-        
-        return highest_mean_candidate
+    def find_alliance_candidates(self, smith_set_candidates, alliance):
+        return [x for x in smith_set_candidates if x in alliance]
